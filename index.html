@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Contador Relax Center</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  body {
+    margin: 0;
+    height: 100vh;
+    background: transparent;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: monospace;
+  }
+  #num {
+    font-size: 32px;
+    color: #ffffff;
+    background: rgba(255,255,255,0.15);
+    padding: 8px 14px;
+    border-radius: 8px;
+    letter-spacing: 4px;
+  }
+</style>
+</head>
+<body>
+<div id="num">000387</div>
+
+<script>
+const NAMESPACE = "relaxcenter-visitas";
+const INITIAL = 387;
+const KEY = "contador";
+
+async function main() {
+  try {
+    let info = await fetch(`https://api.countapi.xyz/get/${NAMESPACE}/${KEY}`)
+                     .then(r => r.json());
+    if (info.value == null) {
+      await fetch(`https://api.countapi.xyz/create?namespace=${NAMESPACE}&key=${KEY}&value=${INITIAL - 1}`);
+    }
+    let hit = await fetch(`https://api.countapi.xyz/hit/${NAMESPACE}/${KEY}`)
+                    .then(r => r.json());
+    document.getElementById("num").textContent =
+      ("000000" + hit.value).slice(-6);
+  } catch (e) {
+    document.getElementById("num").textContent = "000387";
+  }
+}
+main();
+</script>
+</body>
+</html>
